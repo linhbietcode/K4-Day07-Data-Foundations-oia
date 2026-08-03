@@ -109,44 +109,18 @@ Chạy `ChunkingStrategyComparator().compare()` trên 2-3 tài liệu:
 
 > Cách chấm (theo `docs/SCORING.md`): **2 điểm/câu** — top-3 chứa chunk liên quan + agent trả lời đúng (2), có liên quan nhưng thiếu/không ở top-1 (1), không có trong top-3 (0).
 
-| #     | Câu hỏi (Query)                                                                        | Câu trả lời chuẩn (Gold Answer)                                                                                                                                                  | Chunk/Tài liệu chứa thông tin | Yêu cầu lọc Metadata (Nếu có) |
-| ----- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ----------------------------- |
-| **1** | Tôi muốn thanh toán bằng Apple Pay trên Shopee thì đơn hàng phải có giá trị bao nhiêu? | Đơn hàng phải có giá trị thanh toán cuối cùng từ 10.000 VNĐ đến 25.000.000 VNĐ. Apple Pay không áp dụng cho đơn hàng Nạp thẻ & Dịch vụ, Người bán tự vận chuyển hoặc ShopeeFood. | `k4-payment_method` <br>      |
-
-<br>(Mục 7. Apple Pay) | `customer_role: buyer` |
-| **2** | Tôi mua thịt đông lạnh trên Shopee thì có bao nhiêu thời gian để gửi yêu cầu trả hàng hoàn tiền? | Đối với các sản phẩm là thực phẩm tươi sống và đông lạnh, Người Mua cần gửi yêu cầu trả hàng/hoàn tiền trong vòng 24 giờ kể từ lúc đơn hàng được cập nhật giao hàng thành công. | `k4-returns-policy` <br>
-
-<br>(Mục 3.2 - Điều kiện yêu cầu) | `customer_role: buyer` |
-| **3** | Tôi đang sử dụng Gói ShopeeVIP, vậy tôi được miễn phí hoàn hàng với lý do "Không còn nhu cầu" (Trả hàng COM) tối đa bao nhiêu lần một tháng? | Hạn mức Trả hàng COM đối với Người Mua sử dụng Gói ShopeeVIP là 15 (mười lăm) lần trong mỗi tháng dương lịch. | `k4-returns-policy` <br>
-
-<br>(Mục 4.2.b - Hạn mức) | `customer_role: buyer` |
-| **4** | **[Câu hỏi lọc Metadata]** Khi giao hàng cho đơn vị vận chuyển, sản phẩm của tôi phải còn hạn sử dụng tối thiểu bao nhiêu ngày? | Người Bán chỉ được phép bán hàng hóa mà khi giao đi phải còn ít nhất 30% thời hạn sử dụng và còn ít nhất 30 ngày, tính từ thời điểm hiện tại đến ngày hết hạn. | `k4-seller-listing` <br>
-
-<br>(Mục D.2.a - Quy định hạn sử dụng) | **Bắt buộc lọc:** <br>
-
-<br>`customer_role: seller` |
-| **5** | **[Câu hỏi lọc Metadata]** Tôi muốn đăng bán Thực phẩm chức năng nhập khẩu trên Shopee thì cần chuẩn bị những giấy tờ gì? | Cần có: (1) Xác Nhận Công Bố Phù Hợp Quy Định ATTP; (2) Chứng nhận đại lý/Hợp đồng mua bán/Hóa đơn mua hàng; (3) Giấy xác nhận quảng cáo. (Mô tả phải có dòng "Sản phẩm này không phải là thuốc..."). | `k4-seller-listing` <br>
-
-<br>(Mục C.3.2) | **Bắt buộc lọc:** <br>
-
-<br>`customer_role: seller` |
-| **6** | Việc đưa chữ "Sản phẩm hot" hoặc "Giảm giá" vào tên sản phẩm khi đăng bài có vi phạm quy định không? | Có, quy định nghiêm cấm chứa các từ khóa như “Sản phẩm hot”, “Bán chạy” hoặc giá/thông báo khuyến mãi như “Giảm giá”, “Miễn phí vận chuyển” trong tên sản phẩm. | `k4-seller-listing` <br>
-
-<br>(Mục C.2.g - Tên sản phẩm) | `customer_role: seller` |
-| **7** | Shopee có cho phép thu thập thông tin của trẻ em dưới 13 tuổi không? | Không. Các Dịch Vụ không dành cho trẻ em dưới 13 tuổi. Shopee không cố tình thu thập hay lưu giữ dữ liệu cá nhân của người dưới 13 tuổi và sẽ khóa tài khoản/xóa dữ liệu nếu phát hiện. | `k4-privacy_policy` <br>
-
-<br>(Mục 9 - Thông tin về trẻ em) | `customer_role: buyer` *(hoặc both)* |
-| **8** | Tôi muốn yêu cầu Shopee xóa hoặc cung cấp dữ liệu cá nhân của mình thì liên hệ qua đâu? | Bạn có thể liên hệ với Chuyên viên Bảo Vệ Dữ Liệu Cá Nhân của Shopee thông qua địa chỉ email: dpo.vn@shopee.com. | `k4-privacy_policy` <br>
-
-<br>(Mục 13.1 và 14) | Không cần lọc |
-| **9** | **[Câu hỏi lọc Metadata]** Từ ngày 11/08/2026, để đăng bán Thẻ ngân hàng tích hợp công nghệ NFC (không hiển thị thương hiệu ngân hàng) thì cần cung cấp chứng từ gì? | Người bán cần cung cấp Giấy phép phát hành thẻ. | `k4-delivery` <br>
-
-<br>(Mục 2 - Bảng kiểm soát chứng từ) | **Bắt buộc lọc:** <br>
-
-<br>`category: delivery` |
-| **10** | Khi thanh toán bằng thẻ tín dụng/ghi nợ trên Shopee, giá trị đơn hàng tối thiểu là bao nhiêu để được chấp nhận? | Thanh toán qua thẻ Tín dụng/Ghi nợ chỉ áp dụng cho đơn hàng có giá trị thanh toán (bao gồm phí vận chuyển và các chi phí phát sinh khác) từ 10.000 VNĐ trở lên. | `k4-payment_method` <br>
-
-<br>(Mục 2) | `customer_role: buyer` |
+| #      | Câu hỏi (Query)                                                                                                                                                      | Câu trả lời chuẩn (Gold Answer)                                                                                                                                                                       | Chunk/Tài liệu chứa thông tin                          | Yêu cầu lọc Metadata (Nếu có)             |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------- |
+| **1**  | Tôi muốn thanh toán bằng Apple Pay trên Shopee thì đơn hàng phải có giá trị bao nhiêu?                                                                               | Đơn hàng phải có giá trị thanh toán cuối cùng từ 10.000 VNĐ đến 25.000.000 VNĐ. Apple Pay không áp dụng cho đơn hàng Nạp thẻ & Dịch vụ, Người bán tự vận chuyển hoặc ShopeeFood.                      | `k4-payment_method` (Mục 7. Apple Pay)                 | `customer_role: buyer`                    |
+| **2**  | Tôi mua thịt đông lạnh trên Shopee thì có bao nhiêu thời gian để gửi yêu cầu trả hàng hoàn tiền?                                                                     | Đối với các sản phẩm là thực phẩm tươi sống và đông lạnh, Người Mua cần gửi yêu cầu trả hàng/hoàn tiền trong vòng 24 giờ kể từ lúc đơn hàng được cập nhật giao hàng thành công.                       | `k4-returns-policy` (Mục 3.2 - Điều kiện yêu cầu)      | `customer_role: buyer`                    |
+| **3**  | Tôi đang sử dụng Gói ShopeeVIP, vậy tôi được miễn phí hoàn hàng với lý do "Không còn nhu cầu" (Trả hàng COM) tối đa bao nhiêu lần một tháng?                         | Hạn mức Trả hàng COM đối với Người Mua sử dụng Gói ShopeeVIP là 15 (mười lăm) lần trong mỗi tháng dương lịch.                                                                                         | `k4-returns-policy` (Mục 4.2.b - Hạn mức)              | `customer_role: buyer`                    |
+| **4**  | **[Câu hỏi lọc Metadata]** Khi giao hàng cho đơn vị vận chuyển, sản phẩm của tôi phải còn hạn sử dụng tối thiểu bao nhiêu ngày?                                      | Người Bán chỉ được phép bán hàng hóa mà khi giao đi phải còn ít nhất 30% thời hạn sử dụng và còn ít nhất 30 ngày, tính từ thời điểm hiện tại đến ngày hết hạn.                                        | `k4-seller-listing` (Mục D.2.a - Quy định hạn sử dụng) | **Bắt buộc lọc:** `customer_role: seller` |
+| **5**  | **[Câu hỏi lọc Metadata]** Tôi muốn đăng bán Thực phẩm chức năng nhập khẩu trên Shopee thì cần chuẩn bị những giấy tờ gì?                                            | Cần có: (1) Xác Nhận Công Bố Phù Hợp Quy Định ATTP; (2) Chứng nhận đại lý/Hợp đồng mua bán/Hóa đơn mua hàng; (3) Giấy xác nhận quảng cáo. (Mô tả phải có dòng "Sản phẩm này không phải là thuốc..."). | `k4-seller-listing` (Mục C.3.2)                        | **Bắt buộc lọc:** `customer_role: seller` |
+| **6**  | Việc đưa chữ "Sản phẩm hot" hoặc "Giảm giá" vào tên sản phẩm khi đăng bài có vi phạm quy định không?                                                                 | Có, quy định nghiêm cấm chứa các từ khóa như “Sản phẩm hot”, “Bán chạy” hoặc giá/thông báo khuyến mãi như “Giảm giá”, “Miễn phí vận chuyển” trong tên sản phẩm.                                       | `k4-seller-listing` (Mục C.2.g - Tên sản phẩm)         | `customer_role: seller`                   |
+| **7**  | Shopee có cho phép thu thập thông tin của trẻ em dưới 13 tuổi không?                                                                                                 | Không. Các Dịch Vụ không dành cho trẻ em dưới 13 tuổi. Shopee không cố tình thu thập hay lưu giữ dữ liệu cá nhân của người dưới 13 tuổi và sẽ khóa tài khoản/xóa dữ liệu nếu phát hiện.               | `k4-privacy_policy` (Mục 9 - Thông tin về trẻ em)      | `customer_role: buyer` *(hoặc both)*      |
+| **8**  | Tôi muốn yêu cầu Shopee xóa hoặc cung cấp dữ liệu cá nhân của mình thì liên hệ qua đâu?                                                                              | Bạn có thể liên hệ với Chuyên viên Bảo Vệ Dữ Liệu Cá Nhân của Shopee thông qua địa chỉ email: dpo.vn@shopee.com.                                                                                      | `k4-privacy_policy` (Mục 13.1 và 14)                   | Không cần lọc                             |
+| **9**  | **[Câu hỏi lọc Metadata]** Từ ngày 11/08/2026, để đăng bán Thẻ ngân hàng tích hợp công nghệ NFC (không hiển thị thương hiệu ngân hàng) thì cần cung cấp chứng từ gì? | Người bán cần cung cấp Giấy phép phát hành thẻ.                                                                                                                                                       | `k4-delivery` (Mục 2 - Bảng kiểm soát chứng từ)        | **Bắt buộc lọc:** `category: delivery`    |
+| **10** | Khi thanh toán bằng thẻ tín dụng/ghi nợ trên Shopee, giá trị đơn hàng tối thiểu là bao nhiêu để được chấp nhận?                                                      | Thanh toán qua thẻ Tín dụng/Ghi nợ chỉ áp dụng cho đơn hàng có giá trị thanh toán (bao gồm phí vận chuyển và các chi phí phát sinh khác) từ 10.000 VNĐ trở lên.                                       | `k4-payment_method` (Mục 2)                            | `customer_role: buyer`                    |
 
 **Lọc bằng metadata có giúp ích không? Ở câu hỏi nào?**
 > *Viết 2-3 câu:*
