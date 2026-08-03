@@ -1,8 +1,8 @@
 ---
-doc_id: k4-privacy_policy.md
+doc_id: k4-privacy_policy
 title: Chính sách bảo mật
 customer_role: buyer        # buyer | seller | both
-category: returns
+category: security
 language: vi
 source_url: https://help.shopee.vn/portal/4/article/77244-CH%C3%8DNH-S%C3%81CH-B%E1%BA%A2O-M%E1%BA%ACT
 retrieved_at: 2026-08-03
