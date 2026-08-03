@@ -1,7 +1,7 @@
 ---
 doc_id: k4-delivery
 title: Quy định giao hàng
-customer_role: buyer        # buyer | seller | both
+customer_role: seller       # buyer | seller | both
 category: delivery
 language: vi
 source_url: https://banhang.shopee.vn/edu/article/3483
